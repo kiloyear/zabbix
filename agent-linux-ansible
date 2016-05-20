@@ -1,0 +1,25 @@
+---
+- name: install zabbix-agent
+hosts: test
+user: root
+tasks:
+- name: copy zabbix_get file
+copy: src=files/zabbix-agent/bin/zabbix_get dest=/bin/ mode=0755
+- name: copy zabbix_sender file
+copy: src=files/zabbix-agent/bin/zabbix_sender dest=/bin/ mode=0755
+- name: copy zabbix_agentd file
+copy: src=files/zabbix-agent/sbin/zabbix_agentd dest=/sbin/ mode=0755
+- name: copy zabbix_agentd.conf file
+copy: src=files/zabbix-agent/conf/zabbix_agentd.conf dest=/etc/zabbix/
+- name: groupadd zabbix
+group: name=zabbix
+- name: useradd zabbix
+user: name=zabbix group=zabbix
+- name: create /tmp/zabbix
+file: >
+dest=/tmp/zabbix/ owner=zabbix group=zabbix
+- name: create /etc/zabbix/conf.d
+file: >
+dest=/etc/zabbix/conf.d/ owner=zabbix group=zabbix
+- name: start zabbix-agent
+shell: zabbix_agentd -c /etc/zabbix/zabbix_agentd.conf
