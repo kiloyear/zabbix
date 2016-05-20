@@ -1,0 +1,24 @@
+@echo off
+echo copying exe
+
+net use y: \\共享服务器地址\zabbix\win64 密码 /user:administrator
+xcopy Y:\zabbix_agentd.exe c:\
+net use y: /delete
+
+echo creating config file
+
+echo Server=10.88.60.100 >> c:\zabbix_agentd.conf
+echo Hostname=%COMPUTERNAME% >> c:\zabbix_agentd.conf
+echo StartAgents=5 >> c:\zabbix_agentd.conf
+echo DebugLevel=3 >> c:\zabbix_agentd.conf
+echo LogFile=c:\zabbix_agentd.log >> c:\zabbix_agentd.conf
+echo Timeout=3 >> c:\zabbix_agentd.conf
+
+echo installing service
+cd c:\
+zabbix_agentd.exe -i
+
+echo start service?
+pause
+
+zabbix_agentd.exe -s
