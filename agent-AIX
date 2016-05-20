@@ -1,0 +1,30 @@
+下载并上传zabbix_agents_2.4.4.aix6100.powerpc.tar.gz 
+创建用户和组
+#mkgroup -'A' id='333' zabbix
+#mkuser id=333 groups=zabbix home=/tmp/zabbix login=false rlogin=false zabbix
+#chown zabbix:staff /tmp/zabbix
+
+安装agent，将命令拷贝到对应路径下，即可
+#gunzip  -d zabbix_agents_2.0.8.aix6100.powerpc.tar.gz
+#tar -xvf zabbix_agents_2.0.8.aix6100.powerpc.tar
+#cp -p bin/* /bin
+#cp -p sbin/* /sbin
+#zabbix_agentd -V
+
+创建目录
+#mkdir /etc/zabbix
+#mkdir /etc/zabbix/conf.d
+#vi /etc/zabbix/zabbix_agentd.conf
+PidFile = /tmp/zabbix/zabbix_agentd.pid
+LogFile = /tmp/zabbix/zabbix_agentd.log
+LogFileSize = 10
+DebugLevel = 3
+Server = 10.88.60.100
+ServerActive = 127.0.0.1
+Hostname = gp3zbapp
+Timeout = 30
+
+启动agent
+#zabbix_agentd -c /etc/zabbix/zabbix_agentd.conf
+
+在Zabbix上添加服务器host即可实现监控
