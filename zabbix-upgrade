@@ -1,0 +1,26 @@
+#Upgrade from zabbix2.4 to zabbix3.0.1
+#环境说明
+#zabbix2.4(虚拟机)
+#zabbix3.0(Docker容器-zabbix & zabbix-db)
+
+#Step1.从原zabbix2.4服务器上导出数据库
+
+#Step2.将导出的数据库文件 zabbix_config.sql 传到zabbix3.0的数据库容器zabbix-db中  通过挂载本地目录/backups至容器中
+https://github.com/kiloyear/docker/blob/docker/zabbix3.0
+
+#Step3.将数据文件重新导入zabbix-db容器的mysql数据库中
+mysql -uzabbix -pmy_password zabbix < /backups/zabbix_config.sql
+
+#Step4.启动zabbix容器
+https://github.com/kiloyear/docker/blob/docker/zabbix3.0
+
+#Step5.查看zabbix升级日志，并按照日志创建不存在的表(schema.sql)
+tail -f /tmp/zabbix_server.log
+
+#Step6.调整zabbix参数,并重启容器生效
+
+#Step7.配置sms.pl短信告警相关
+
+#Step8.部署服务器agent，添加hosts
+
+
