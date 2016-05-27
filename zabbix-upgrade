@@ -18,8 +18,42 @@ https://github.com/kiloyear/docker/blob/docker/zabbix3.0
 tail -f /tmp/zabbix_server.log
 
 #Step6.调整zabbix参数,并重启容器生效
+Problem: Zabbix proxy poller processes more than 75% busy
+Solution: In zabbix_server.conf
+StartPollers=20
+  
+Problem: Zabbix icmp pinger processes more than 75% busy
+Solution: In zabbix_server.conf
+StartPingers=10 StartDiscoverers=10
+ 
+Problem: Zabbix unreachable poller processes more than 75% busy
+Solution: In zabbix_server.conf
+StartPollersUnreachable=10
+ 
+Problem：Less than 25% free in the configuration cache
+Solution：In /etc/zabbix/zabbix_server.conf
+CacheSize=32M
+
+zabbix图片显示中文乱码问题
+ 
+问题原因：由于zabbix的web前端没有中文字体
+解决方法：
+1. 进入 C:\Windows\Fonts 选择其中任意一种中文字体例如 “微软雅黑” ( msyh.ttf )
+2. 将 Windows 下的中文字体文件( for example: simhei.ttf ) 上传到 zabbix web 目录( Default  :  /usr/share/zabbix )下的 fonts 目录 ( Default: /usr/share/zabbix/fonts )
+3. 修改zabbix的web前端的字体设置，将如下两行修改为：
+ 
+#vi /usr/share/zabbix/include/define.inc.php
+define('ZBX_FONT_NAME', 'DejaVuSans');
+define('ZBX_GRAPH_FONT_NAME', 'DejaVuSans');
+修改为
+ 
+define('ZBX_FONT_NAME',  'msyh');
+define('ZBX_GRAPH_FONT_NAME',  'msyh');
+ 
+其中msyh为字库名字，不用写ttf后缀。
 
 #Step7.配置sms.pl短信告警相关
+
 
 #Step8.部署服务器agent，添加hosts
 
